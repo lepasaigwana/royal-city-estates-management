@@ -1,0 +1,2541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal City Estates Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+        }
+
+        /* Login Page */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-box h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .login-box .estate-name {
+            text-align: center;
+            color: #667eea;
+            font-size: 14px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .demo-login {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .demo-login span {
+            display: inline-block;
+            margin: 5px;
+            padding: 5px 10px;
+            background: #f0f2f5;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .demo-login span:hover {
+            background: #e0e2e5;
+        }
+
+        /* Dashboard Layout */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header h3 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .user-info {
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        .user-info .name {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .user-info .role {
+            font-size: 12px;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            margin-bottom: 5px;
+        }
+
+        .menu li a {
+            display: block;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s;
+            font-size: 14px;
+        }
+
+        .menu li a:hover, .menu li a.active {
+            background: rgba(255,255,255,0.2);
+            border-left: 4px solid white;
+        }
+
+        .menu li a i {
+            margin-right: 10px;
+            width: 20px;
+            display: inline-block;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .logout-btn {
+            padding: 8px 15px;
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout-btn:hover {
+            background: #d32f2f;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stat-card .small-text {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .content-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .content-card h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th {
+            text-align: left;
+            padding: 12px;
+            background: #f8f9fa;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .badge {
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .form-row {
+            margin-bottom: 15px;
+        }
+
+        .form-row label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-row input, .form-row select, .form-row textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-row textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .mpesa-section {
+            background: #f0f2f5;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .mpesa-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+
+        .paybill {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .paybill .number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .house-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .house-card {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            transition: transform 0.2s;
+        }
+
+        .house-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .house-card.vacant {
+            border-color: #28a745;
+        }
+
+        .house-card.occupied {
+            border-color: #dc3545;
+        }
+
+        .house-card .number {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .house-card .type {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .house-card .rent {
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .house-card .status {
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-box">
+            <h2>Royal City Estates</h2>
+            <div class="estate-name">MANAGEMENT SYSTEM</div>
+            
+            <div id="loginError" class="alert alert-danger" style="display: none; margin-bottom: 20px;">
+                Invalid email or password. Please try again.
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" value="manager@royalcity.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" value="password123" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Login as</label>
+                    <select id="loginRole">
+                        <option value="manager">Manager</option>
+                        <option value="tenant">Tenant</option>
+                        <option value="worker">Worker</option>
+                        <option value="guard">Guard</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="login-btn">LOGIN TO DASHBOARD</button>
+            </form>
+            
+            <div class="demo-login">
+                <strong>Demo Login Credentials:</strong><br>
+                <span onclick="quickLogin('manager')">Manager: manager@royalcity.com</span>
+                <span onclick="quickLogin('tenant')">Tenant: john@email.com</span>
+                <span onclick="quickLogin('worker')">Worker: peter@email.com</span>
+                <span onclick="quickLogin('guard')">Guard: james@email.com</span>
+                <br>
+                <small>(Any password works in this demo)</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manager Dashboard -->
+    <div id="managerDashboard" class="dashboard">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3>Royal City Estates</h3>
+                <p>Management System</p>
+            </div>
+            
+            <div class="user-info">
+                <div class="name" id="managerName">John Manager</div>
+                <div class="role">ESTATE MANAGER</div>
+            </div>
+            
+            <ul class="menu">
+                <li><a href="#" onclick="showManagerSection('dashboard')" class="active" id="menu-dashboard"><i>📊</i> Dashboard</a></li>
+                <li><a href="#" onclick="showManagerSection('houses')" id="menu-houses"><i>🏠</i> Houses</a></li>
+                <li><a href="#" onclick="showManagerSection('tenants')" id="menu-tenants"><i>👥</i> Tenants</a></li>
+                <li><a href="#" onclick="showManagerSection('workers')" id="menu-workers"><i>👷</i> Workers</a></li>
+                <li><a href="#" onclick="showManagerSection('payments')" id="menu-payments"><i>💰</i> Payments</a></li>
+                <li><a href="#" onclick="showManagerSection('maintenance')" id="menu-maintenance"><i>🔧</i> Maintenance</a></li>
+                <li><a href="#" onclick="showManagerSection('security')" id="menu-security"><i>🔒</i> Security</a></li>
+                <li><a href="#" onclick="showManagerSection('bookings')" id="menu-bookings"><i>📅</i> Bookings</a></li>
+                <li><a href="#" onclick="showManagerSection('reports')" id="menu-reports"><i>📈</i> Reports</a></li>
+                <li><a href="#" onclick="showManagerSection('alerts')" id="menu-alerts"><i>⚠️</i> Send Alert</a></li>
+            </ul>
+        </div>
+        
+        <div class="main-content">
+            <div class="top-bar">
+                <div class="page-title" id="managerPageTitle">Dashboard</div>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+            
+            <!-- Manager Dashboard Section -->
+            <div id="manager-dashboard-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Houses</h3>
+                        <div class="number">45</div>
+                        <div class="small-text">in the estate</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Occupied</h3>
+                        <div class="number">38</div>
+                        <div class="small-text">84% occupancy</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Vacant</h3>
+                        <div class="number">7</div>
+                        <div class="small-text">ready for rent</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Tenants</h3>
+                        <div class="number">38</div>
+                        <div class="small-text">active tenants</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Rent Collected</h3>
+                        <div class="number">KSh 456,000</div>
+                        <div class="small-text">this month</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Outstanding</h3>
+                        <div class="number">KSh 84,000</div>
+                        <div class="small-text">from 5 tenants</div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>Recent Payments</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tenant</th>
+                                <th>House</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>John Kamau</td>
+                                <td>House 12</td>
+                                <td>KSh 12,000</td>
+                                <td>2026-03-09</td>
+                                <td><span class="badge badge-success">Paid</span></td>
+                            </tr>
+                            <tr>
+                                <td>Mary Wanjiku</td>
+                                <td>House 8</td>
+                                <td>KSh 15,000</td>
+                                <td>2026-03-08</td>
+                                <td><span class="badge badge-success">Paid</span></td>
+                            </tr>
+                            <tr>
+                                <td>Peter Omondi</td>
+                                <td>House 23</td>
+                                <td>KSh 10,000</td>
+                                <td>2026-03-07</td>
+                                <td><span class="badge badge-success">Paid</span></td>
+                            </tr>
+                            <tr>
+                                <td>James Mwangi</td>
+                                <td>House 5</td>
+                                <td>KSh 18,000</td>
+                                <td>2026-03-05</td>
+                                <td><span class="badge badge-success">Paid</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="content-card">
+                    <h2>Pending Maintenance Requests</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tenant</th>
+                                <th>Issue</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>John Kamau</td>
+                                <td>Leaking pipe in kitchen</td>
+                                <td>2026-03-08</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td><button class="btn btn-primary btn-small" onclick="assignWorker(1)">Assign</button></td>
+                            </tr>
+                            <tr>
+                                <td>Mary Wanjiku</td>
+                                <td>Broken window</td>
+                                <td>2026-03-07</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td><button class="btn btn-primary btn-small" onclick="assignWorker(2)">Assign</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Houses Management Section -->
+            <div id="manager-houses-section" style="display: none;">
+                <div class="content-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2>Houses Management</h2>
+                        <button class="btn btn-success" onclick="showAddHouseModal()">+ Add New House</button>
+                    </div>
+                    
+                    <div class="house-grid">
+                        <div class="house-card vacant">
+                            <div class="number">House 1</div>
+                            <div class="type">2-Bedroom</div>
+                            <div class="rent">KSh 12,000/month</div>
+                            <div class="status" style="color: #28a745;">VACANT</div>
+                        </div>
+                        <div class="house-card occupied">
+                            <div class="number">House 2</div>
+                            <div class="type">3-Bedroom</div>
+                            <div class="rent">KSh 18,000/month</div>
+                            <div class="status" style="color: #dc3545;">OCCUPIED</div>
+                        </div>
+                        <div class="house-card occupied">
+                            <div class="number">House 3</div>
+                            <div class="type">2-Bedroom</div>
+                            <div class="rent">KSh 12,000/month</div>
+                            <div class="status" style="color: #dc3545;">OCCUPIED</div>
+                        </div>
+                        <div class="house-card vacant">
+                            <div class="number">House 4</div>
+                            <div class="type">Bedsitter</div>
+                            <div class="rent">KSh 8,000/month</div>
+                            <div class="status" style="color: #28a745;">VACANT</div>
+                        </div>
+                        <div class="house-card occupied">
+                            <div class="number">House 5</div>
+                            <div class="type">3-Bedroom</div>
+                            <div class="rent">KSh 18,000/month</div>
+                            <div class="status" style="color: #dc3545;">OCCUPIED</div>
+                        </div>
+                        <div class="house-card occupied">
+                            <div class="number">House 6</div>
+                            <div class="type">2-Bedroom</div>
+                            <div class="rent">KSh 12,000/month</div>
+                            <div class="status" style="color: #dc3545;">OCCUPIED</div>
+                        </div>
+                        <div class="house-card vacant">
+                            <div class="number">House 7</div>
+                            <div class="type">1-Bedroom</div>
+                            <div class="rent">KSh 10,000/month</div>
+                            <div class="status" style="color: #28a745;">VACANT</div>
+                        </div>
+                        <div class="house-card occupied">
+                            <div class="number">House 8</div>
+                            <div class="type">2-Bedroom</div>
+                            <div class="rent">KSh 12,000/month</div>
+                            <div class="status" style="color: #dc3545;">OCCUPIED</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tenants Management Section -->
+            <div id="manager-tenants-section" style="display: none;">
+                <div class="content-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2>Tenants Management</h2>
+                        <button class="btn btn-success" onclick="showAddTenantModal()">+ Add New Tenant</button>
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>House</th>
+                                <th>Lease Start</th>
+                                <th>Rent Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>John Kamau</td>
+                                <td>0712345678</td>
+                                <td>john@email.com</td>
+                                <td>House 12</td>
+                                <td>2026-01-15</td>
+                                <td><span class="badge badge-success">Paid</span></td>
+                                <td>
+                                    <button class="btn btn-primary btn-small">Edit</button>
+                                    <button class="btn btn-danger btn-small">End Lease</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Mary Wanjiku</td>
+                                <td>0723456789</td>
+                                <td>mary@email.com</td>
+                                <td>House 8</td>
+                                <td>2025-12-01</td>
+                                <td><span class="badge badge-success">Paid</span></td>
+                                <td>
+                                    <button class="btn btn-primary btn-small">Edit</button>
+                                    <button class="btn btn-danger btn-small">End Lease</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Peter Omondi</td>
+                                <td>0734567890</td>
+                                <td>peter@email.com</td>
+                                <td>House 23</td>
+                                <td>2026-02-10</td>
+                                <td><span class="badge badge-success">Paid</span></td>
+                                <td>
+                                    <button class="btn btn-primary btn-small">Edit</button>
+                                    <button class="btn btn-danger btn-small">End Lease</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>James Mwangi</td>
+                                <td>0745678901</td>
+                                <td>james@email.com</td>
+                                <td>House 5</td>
+                                <td>2025-10-20</td>
+                                <td><span class="badge badge-success">Paid</span></td>
+                                <td>
+                                    <button class="btn btn-primary btn-small">Edit</button>
+                                    <button class="btn btn-danger btn-small">End Lease</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Sarah Akinyi</td>
+                                <td>0756789012</td>
+                                <td>sarah@email.com</td>
+                                <td>House 15</td>
+                                <td>2026-01-05</td>
+                                <td><span class="badge badge-warning">Overdue</span></td>
+                                <td>
+                                    <button class="btn btn-primary btn-small">Edit</button>
+                                    <button class="btn btn-danger btn-small">End Lease</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Workers Management Section -->
+            <div id="manager-workers-section" style="display: none;">
+                <div class="content-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2>Workers Management</h2>
+                        <button class="btn btn-success" onclick="showAddWorkerModal()">+ Add New Worker</button>
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Phone</th>
+                                <th>Today's Attendance</th>
+                                <th>Current Duty</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Peter Odhiambo</td>
+                                <td>Gardener</td>
+                                <td>0711223344</td>
+                                <td><span class="badge badge-success">Clocked in 7:45 AM</span></td>
+                                <td>Water flowers</td>
+                                <td><button class="btn btn-primary btn-small">Assign Duty</button></td>
+                            </tr>
+                            <tr>
+                                <td>John Muthuri</td>
+                                <td>Cleaner</td>
+                                <td>0722334455</td>
+                                <td><span class="badge badge-success">Clocked in 8:00 AM</span></td>
+                                <td>Clean common areas</td>
+                                <td><button class="btn btn-primary btn-small">Assign Duty</button></td>
+                            </tr>
+                            <tr>
+                                <td>David Kimani</td>
+                                <td>Handyman</td>
+                                <td>0733445566</td>
+                                <td><span class="badge badge-danger">Not clocked in</span></td>
+                                <td>Fix maintenance issues</td>
+                                <td><button class="btn btn-primary btn-small">Assign Duty</button></td>
+                            </tr>
+                            <tr>
+                                <td>Samuel Ochieng</td>
+                                <td>Gardener</td>
+                                <td>0744556677</td>
+                                <td><span class="badge badge-success">Clocked in 7:30 AM</span></td>
+                                <td>Mow lawn</td>
+                                <td><button class="btn btn-primary btn-small">Assign Duty</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="content-card">
+                    <h2>Today's Attendance Summary</h2>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center;">
+                        <div>
+                            <div style="font-size: 24px; font-weight: bold; color: #28a745;">3</div>
+                            <div>Present</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 24px; font-weight: bold; color: #ffc107;">0</div>
+                            <div>Late</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 24px; font-weight: bold; color: #dc3545;">1</div>
+                            <div>Absent</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Payments Section -->
+            <div id="manager-payments-section" style="display: none;">
+                <div class="content-card">
+                    <h2>Rent Payments - March 2026</h2>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0;">
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; text-align: center;">
+                            <div style="font-size: 14px; color: #666;">Total Expected</div>
+                            <div style="font-size: 24px; font-weight: bold;">KSh 540,000</div>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; text-align: center;">
+                            <div style="font-size: 14px; color: #666;">Collected</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #28a745;">KSh 456,000</div>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; text-align: center;">
+                            <div style="font-size: 14px; color: #666;">Outstanding</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #dc3545;">KSh 84,000</div>
+                        </div>
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tenant</th>
+                                <th>House</th>
+                                <th>Rent Amount</th>
+                                <th>Status</th>
+                                <th>Payment Date</th>
+                                <th>Mpesa Code</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>John Kamau</td>
+                                <td>House 12</td>
+                                <td>KSh 12,000</td>
+                                <td><span class="badge badge-success">Paid</span></td>
+                                <td>2026-03-09</td>
+                                <td>MPESA123</td>
+                            </tr>
+                            <tr>
+                                <td>Mary Wanjiku</td>
+                                <td>House 8</td>
+                                <td>KSh 15,000</td>
+                                <td><span class="badge badge-success">Paid</span></td>
+                                <td>2026-03-08</td>
+                                <td>MPESA456</td>
+                            </tr>
+                            <tr>
+                                <td>Peter Omondi</td>
+                                <td>House 23</td>
+                                <td>KSh 10,000</td>
+                                <td><span class="badge badge-success">Paid</span></td>
+                                <td>2026-03-07</td>
+                                <td>MPESA789</td>
+                            </tr>
+                            <tr>
+                                <td>James Mwangi</td>
+                                <td>House 5</td>
+                                <td>KSh 18,000</td>
+                                <td><span class="badge badge-success">Paid</span></td>
+                                <td>2026-03-05</td>
+                                <td>MPESA101</td>
+                            </tr>
+                            <tr>
+                                <td>Sarah Akinyi</td>
+                                <td>House 15</td>
+                                <td>KSh 12,000</td>
+                                <td><span class="badge badge-warning">Overdue</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Joseph Kariuki</td>
+                                <td>House 20</td>
+                                <td>KSh 15,000</td>
+                                <td><span class="badge badge-warning">Overdue</span></td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Maintenance Section -->
+            <div id="manager-maintenance-section" style="display: none;">
+                <div class="content-card">
+                    <h2>Maintenance Requests</h2>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tenant</th>
+                                <th>House</th>
+                                <th>Issue</th>
+                                <th>Date Reported</th>
+                                <th>Status</th>
+                                <th>Assigned To</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>John Kamau</td>
+                                <td>House 12</td>
+                                <td>Leaking pipe in kitchen</td>
+                                <td>2026-03-08</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td>-</td>
+                                <td><button class="btn btn-primary btn-small" onclick="assignWorker(1)">Assign</button></td>
+                            </tr>
+                            <tr>
+                                <td>Mary Wanjiku</td>
+                                <td>House 8</td>
+                                <td>Broken window</td>
+                                <td>2026-03-07</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td>-</td>
+                                <td><button class="btn btn-primary btn-small" onclick="assignWorker(2)">Assign</button></td>
+                            </tr>
+                            <tr>
+                                <td>Peter Omondi</td>
+                                <td>House 23</td>
+                                <td>Electricity problem</td>
+                                <td>2026-03-06</td>
+                                <td><span class="badge badge-info">In Progress</span></td>
+                                <td>David (Handyman)</td>
+                                <td><button class="btn btn-success btn-small">Mark Done</button></td>
+                            </tr>
+                            <tr>
+                                <td>James Mwangi</td>
+                                <td>House 5</td>
+                                <td>Broken gate</td>
+                                <td>2026-03-04</td>
+                                <td><span class="badge badge-success">Completed</span></td>
+                                <td>David (Handyman)</td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Security Section -->
+            <div id="manager-security-section" style="display: none;">
+                <div class="content-card">
+                    <h2>Security Incidents</h2>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date/Time</th>
+                                <th>Reported By</th>
+                                <th>Location</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2026-03-09 02:30 AM</td>
+                                <td>James (Guard)</td>
+                                <td>Main Gate</td>
+                                <td>Suspicious person loitering</td>
+                                <td><span class="badge badge-warning">Investigating</span></td>
+                                <td><button class="btn btn-primary btn-small">Update</button></td>
+                            </tr>
+                            <tr>
+                                <td>2026-03-08 11:00 PM</td>
+                                <td>John (Guard)</td>
+                                <td>Perimeter fence</td>
+                                <td>Broken fence near House 15</td>
+                                <td><span class="badge badge-success">Resolved</span></td>
+                                <td><button class="btn btn-primary btn-small">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>2026-03-07 08:15 PM</td>
+                                <td>James (Guard)</td>
+                                <td>Parking area</td>
+                                <td>Unknown car parked overnight</td>
+                                <td><span class="badge badge-success">Resolved</span></td>
+                                <td><button class="btn btn-primary btn-small">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Bookings Section -->
+            <div id="manager-bookings-section" style="display: none;">
+                <div class="content-card">
+                    <h2>House Booking Requests</h2>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>House Interested</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Michael Otieno</td>
+                                <td>0765432198</td>
+                                <td>michael@email.com</td>
+                                <td>House 4 (Bedsitter)</td>
+                                <td>2026-03-08</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td>
+                                    <button class="btn btn-success btn-small">Approve</button>
+                                    <button class="btn btn-danger btn-small">Reject</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Lucy Njeri</td>
+                                <td>0754321987</td>
+                                <td>lucy@email.com</td>
+                                <td>House 7 (1-Bedroom)</td>
+                                <td>2026-03-07</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td>
+                                    <button class="btn btn-success btn-small">Approve</button>
+                                    <button class="btn btn-danger btn-small">Reject</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>David Mwangi</td>
+                                <td>0743219876</td>
+                                <td>david@email.com</td>
+                                <td>House 1 (2-Bedroom)</td>
+                                <td>2026-03-06</td>
+                                <td><span class="badge badge-success">Approved</span></td>
+                                <td>Contacted</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Reports Section -->
+            <div id="manager-reports-section" style="display: none;">
+                <div class="content-card">
+                    <h2>Generate Reports</h2>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 5px; text-align: center; cursor: pointer;" onclick="generateReport('occupancy')">
+                            <div style="font-size: 40px; margin-bottom: 10px;">🏠</div>
+                            <div style="font-weight: bold;">Occupancy Report</div>
+                            <div style="font-size: 12px; color: #666;">View house occupancy status</div>
+                        </div>
+                        
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 5px; text-align: center; cursor: pointer;" onclick="generateReport('rent')">
+                            <div style="font-size: 40px; margin-bottom: 10px;">💰</div>
+                            <div style="font-weight: bold;">Rent Collection Report</div>
+                            <div style="font-size: 12px; color: #666;">View payments and outstanding</div>
+                        </div>
+                        
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 5px; text-align: center; cursor: pointer;" onclick="generateReport('attendance')">
+                            <div style="font-size: 40px; margin-bottom: 10px;">👷</div>
+                            <div style="font-weight: bold;">Attendance Report</div>
+                            <div style="font-size: 12px; color: #666;">View worker attendance</div>
+                        </div>
+                        
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 5px; text-align: center; cursor: pointer;" onclick="generateReport('maintenance')">
+                            <div style="font-size: 40px; margin-bottom: 10px;">🔧</div>
+                            <div style="font-weight: bold;">Maintenance Report</div>
+                            <div style="font-size: 12px; color: #666;">View maintenance requests</div>
+                        </div>
+                        
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 5px; text-align: center; cursor: pointer;" onclick="generateReport('security')">
+                            <div style="font-size: 40px; margin-bottom: 10px;">🔒</div>
+                            <div style="font-weight: bold;">Security Report</div>
+                            <div style="font-size: 12px; color: #666;">View security incidents</div>
+                        </div>
+                        
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 5px; text-align: center; cursor: pointer;" onclick="generateReport('financial')">
+                            <div style="font-size: 40px; margin-bottom: 10px;">📊</div>
+                            <div style="font-weight: bold;">Financial Summary</div>
+                            <div style="font-size: 12px; color: #666;">View income and expenses</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="reportPreview" class="content-card" style="display: none;">
+                    <h2 id="reportTitle">Report Preview</h2>
+                    <div id="reportContent"></div>
+                </div>
+            </div>
+            
+            <!-- Send Alert Section -->
+            <div id="manager-alerts-section" style="display: none;">
+                <div class="content-card">
+                    <h2>Send Emergency Alert</h2>
+                    
+                    <div class="alert alert-info">
+                        <strong>Note:</strong> This alert will be sent to all tenants, workers, and guards immediately.
+                    </div>
+                    
+                    <div class="form-row">
+                        <label>Alert Type</label>
+                        <select id="alertType">
+                            <option value="emergency">🚨 Emergency</option>
+                            <option value="security">🔒 Security Alert</option>
+                            <option value="maintenance">🔧 Maintenance Notice</option>
+                            <option value="general">📢 General Announcement</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-row">
+                        <label>Message</label>
+                        <textarea id="alertMessage" placeholder="Type your alert message here..."></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <label>Recipients</label>
+                        <div>
+                            <label><input type="checkbox" checked disabled> All Tenants (38)</label><br>
+                            <label><input type="checkbox" checked disabled> All Workers (4)</label><br>
+                            <label><input type="checkbox" checked disabled> All Guards (2)</label>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-danger" onclick="sendAlert()" style="width: 100%; padding: 15px; font-size: 16px;">SEND ALERT NOW</button>
+                </div>
+                
+                <div class="content-card">
+                    <h2>Recent Alerts</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date/Time</th>
+                                <th>Type</th>
+                                <th>Message</th>
+                                <th>Sent By</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2026-03-09 10:30 AM</td>
+                                <td><span class="badge badge-danger">Emergency</span></td>
+                                <td>Fire drill at 3:00 PM</td>
+                                <td>Manager</td>
+                            </tr>
+                            <tr>
+                                <td>2026-03-08 08:00 PM</td>
+                                <td><span class="badge badge-warning">Security</span></td>
+                                <td>Suspicious person reported, be vigilant</td>
+                                <td>Manager</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tenant Dashboard -->
+    <div id="tenantDashboard" class="dashboard">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3>Royal City Estates</h3>
+                <p>Tenant Portal</p>
+            </div>
+            
+            <div class="user-info">
+                <div class="name" id="tenantName">John Kamau</div>
+                <div class="role">TENANT - House 12</div>
+            </div>
+            
+            <ul class="menu">
+                <li><a href="#" onclick="showTenantSection('dashboard')" class="active" id="tenant-menu-dashboard"><i>📊</i> Dashboard</a></li>
+                <li><a href="#" onclick="showTenantSection('pay-rent')" id="tenant-menu-payrent"><i>💰</i> Pay Rent</a></li>
+                <li><a href="#" onclick="showTenantSection('maintenance')" id="tenant-menu-maintenance"><i>🔧</i> Maintenance</a></li>
+                <li><a href="#" onclick="showTenantSection('history')" id="tenant-menu-history"><i>📜</i> Payment History</a></li>
+                <li><a href="#" onclick="showTenantSection('profile')" id="tenant-menu-profile"><i>👤</i> My Profile</a></li>
+            </ul>
+        </div>
+        
+        <div class="main-content">
+            <div class="top-bar">
+                <div class="page-title" id="tenantPageTitle">Dashboard</div>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+            
+            <!-- Tenant Dashboard Section -->
+            <div id="tenant-dashboard-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>My House</h3>
+                        <div class="number">House 12</div>
+                        <div class="small-text">2-Bedroom</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Monthly Rent</h3>
+                        <div class="number">KSh 12,000</div>
+                        <div class="small-text">Due by 5th each month</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Current Status</h3>
+                        <div class="number" style="color: #28a745;">PAID</div>
+                        <div class="small-text">For March 2026</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Last Payment</h3>
+                        <div class="number">09 Mar 2026</div>
+                        <div class="small-text">KSh 12,000</div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>Current Invoice - March 2026</h2>
+                    <div style="border: 2px solid #667eea; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Invoice #: INV-2026-03-12</span>
+                            <span>Date: 01 Mar 2026</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold;">
+                            <span>House 12 - 2-Bedroom</span>
+                            <span>Due: 05 Mar 2026</span>
+                        </div>
+                        <hr>
+                        <div style="display: flex; justify-content: space-between; font-size: 24px; font-weight: bold; margin-top: 10px;">
+                            <span>Total Due:</span>
+                            <span>KSh 12,000</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-success" onclick="showTenantSection('pay-rent')" style="width: 100%; padding: 15px;">PAY NOW VIA MPESA</button>
+                </div>
+                
+                <div class="content-card">
+                    <h2>Recent Activity</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>09 Mar 2026</td>
+                                <td>Rent payment received</td>
+                                <td><span class="badge badge-success">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>01 Mar 2026</td>
+                                <td>Invoice generated for March</td>
+                                <td><span class="badge badge-info">Generated</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Pay Rent Section -->
+            <div id="tenant-payrent-section" style="display: none;">
+                <div class="content-card">
+                    <h2>Pay Rent via Mpesa</h2>
+                    
+                    <div class="mpesa-section">
+                        <div class="mpesa-logo">M-PESA</div>
+                        
+                        <div class="paybill">
+                            <div style="font-size: 14px; color: #666;">Paybill Number</div>
+                            <div class="number">123456</div>
+                            <div style="font-size: 14px; color: #666; margin-top: 5px;">Business: Royal City Estates</div>
+                        </div>
+                        
+                        <div class="paybill">
+                            <div style="font-size: 14px; color: #666;">Account Number</div>
+                            <div class="number">12</div>
+                            <div style="font-size: 14px; color: #666; margin-top: 5px;">(Your House Number)</div>
+                        </div>
+                        
+                        <div class="paybill">
+                            <div style="font-size: 14px; color: #666;">Amount to Pay</div>
+                            <div class="number">KSh 12,000</div>
+                        </div>
+                        
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin: 20px 0; text-align: left;">
+                            <h4 style="margin-bottom: 10px;">Instructions:</h4>
+                            <ol style="padding-left: 20px;">
+                                <li>Go to M-Pesa on your phone</li>
+                                <li>Select "Lipa Na M-Pesa"</li>
+                                <li>Select "Paybill"</li>
+                                <li>Enter Business Number: <strong>123456</strong></li>
+                                <li>Enter Account Number: <strong>12</strong></li>
+                                <li>Enter Amount: <strong>12000</strong></li>
+                                <li>Enter your M-Pesa PIN</li>
+                                <li>Confirm payment</li>
+                            </ol>
+                        </div>
+                        
+                        <div style="margin-top: 20px;">
+                            <label style="display: block; margin-bottom: 10px;">Enter M-Pesa Confirmation Code after payment:</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" id="mpesaCode" placeholder="e.g., QW123456" style="flex: 1; padding: 10px;">
+                                <button class="btn btn-success" onclick="confirmPayment()">Confirm Payment</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tenant Maintenance Section -->
+            <div id="tenant-maintenance-section" style="display: none;">
+                <div class="content-card">
+                    <h2>Report Maintenance Issue</h2>
+                    
+                    <div class="form-row">
+                        <label>Issue Type</label>
+                        <select id="issueType">
+                            <option>Plumbing (leaking pipe, blocked sink)</option>
+                            <option>Electrical (no power, faulty switch)</option>
+                            <option>Structural (broken window, door)</option>
+                            <option>Appliance (stove, geyser)</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-row">
+                        <label>Description</label>
+                        <textarea id="issueDescription" placeholder="Describe the problem in detail..."></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <label>When can worker access?</label>
+                        <select id="accessTime">
+                            <option>Anytime</option>
+                            <option>Morning (8am - 12pm)</option>
+                            <option>Afternoon (12pm - 4pm)</option>
+                            <option>Evening (4pm - 7pm)</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="submitMaintenance()" style="width: 100%; padding: 15px;">SUBMIT REQUEST</button>
+                </div>
+                
+                <div class="content-card">
+                    <h2>My Maintenance Requests</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Issue</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>08 Mar 2026</td>
+                                <td>Leaking pipe in kitchen</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>01 Mar 2026</td>
+                                <td>Broken window in bedroom</td>
+                                <td><span class="badge badge-success">Completed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Payment History Section -->
+            <div id="tenant-history-section" style="display: none;">
+                <div class="content-card">
+                    <h2>Payment History</h2>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Invoice Date</th>
+                                <th>Amount</th>
+                                <th>Payment Date</th>
+                                <th>Mpesa Code</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>March 2026</td>
+                                <td>01 Mar 2026</td>
+                                <td>KSh 12,000</td>
+                                <td>09 Mar 2026</td>
+                                <td>MPESA123</td>
+                                <td><span class="badge badge-success">Paid</span></td>
+                            </tr>
+                            <tr>
+                                <td>February 2026</td>
+                                <td>01 Feb 2026</td>
+                                <td>KSh 12,000</td>
+                                <td>03 Feb 2026</td>
+                                <td>MPESA456</td>
+                                <td><span class="badge badge-success">Paid</span></td>
+                            </tr>
+                            <tr>
+                                <td>January 2026</td>
+                                <td>01 Jan 2026</td>
+                                <td>KSh 12,000</td>
+                                <td>05 Jan 2026</td>
+                                <td>MPESA789</td>
+                                <td><span class="badge badge-success">Paid</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Tenant Profile Section -->
+            <div id="tenant-profile-section" style="display: none;">
+                <div class="content-card">
+                    <h2>My Profile</h2>
+                    
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 5px; margin-bottom: 20px;">
+                        <p><strong>Full Name:</strong> John Kamau</p>
+                        <p><strong>Email:</strong> john@email.com</p>
+                        <p><strong>Phone:</strong> 0712345678</p>
+                        <p><strong>ID Number:</strong> 12345678</p>
+                        <p><strong>House:</strong> House 12 (2-Bedroom)</p>
+                        <p><strong>Lease Start:</strong> 15 Jan 2026</p>
+                        <p><strong>Emergency Contact:</strong> Mary Kamau - 0723456789</p>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="alert('Profile update feature coming soon!')">Edit Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Worker Dashboard -->
+    <div id="workerDashboard" class="dashboard">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3>Royal City Estates</h3>
+                <p>Worker Portal</p>
+            </div>
+            
+            <div class="user-info">
+                <div class="name" id="workerName">Peter Odhiambo</div>
+                <div class="role">GARDENER</div>
+            </div>
+            
+            <ul class="menu">
+                <li><a href="#" onclick="showWorkerSection('dashboard')" class="active" id="worker-menu-dashboard"><i>📊</i> Dashboard</a></li>
+                <li><a href="#" onclick="showWorkerSection('attendance')" id="worker-menu-attendance"><i>⏰</i> Attendance</a></li>
+                <li><a href="#" onclick="showWorkerSection('tasks')" id="worker-menu-tasks"><i>✅</i> My Tasks</a></li>
+            </ul>
+        </div>
+        
+        <div class="main-content">
+            <div class="top-bar">
+                <div class="page-title" id="workerPageTitle">Dashboard</div>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+            
+            <!-- Worker Dashboard Section -->
+            <div id="worker-dashboard-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Today's Date</h3>
+                        <div class="number" id="currentDate">09 Mar 2026</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Attendance Status</h3>
+                        <div class="number" style="color: #28a745;" id="attendanceStatus">Clocked In</div>
+                        <div class="small-text">at 7:45 AM</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Tasks Today</h3>
+                        <div class="number">3</div>
+                        <div class="small-text">2 completed, 1 pending</div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>Today's Tasks</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Water flowers</td>
+                                <td>Main garden</td>
+                                <td><span class="badge badge-success">Completed</span></td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Mow lawn</td>
+                                <td>Front area</td>
+                                <td><span class="badge badge-success">Completed</span></td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Trim hedges</td>
+                                <td>Perimeter</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td><button class="btn btn-success btn-small" onclick="completeTask(3)">Mark Done</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="content-card">
+                    <h2>Recent Alerts</h2>
+                    <div class="alert alert-info">🚨 Fire drill today at 3:00 PM - All workers to participate</div>
+                </div>
+            </div>
+            
+            <!-- Worker Attendance Section -->
+            <div id="worker-attendance-section" style="display: none;">
+                <div class="content-card">
+                    <h2>Mark Attendance</h2>
+                    
+                    <div style="text-align: center; padding: 30px;">
+                        <div style="font-size: 60px; margin-bottom: 20px;">⏰</div>
+                        <div style="font-size: 24px; margin-bottom: 10px;" id="currentTime"></div>
+                        <div style="margin-bottom: 30px;" id="attendanceMessage">You are clocked in since 7:45 AM</div>
+                        
+                        <button class="btn btn-success" onclick="clockIn()" id="clockInBtn" style="display: none; padding: 15px 30px; font-size: 16px;">CLOCK IN</button>
+                        <button class="btn btn-danger" onclick="clockOut()" id="clockOutBtn" style="padding: 15px 30px; font-size: 16px;">CLOCK OUT</button>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>Attendance History (This Week)</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Clock In</th>
+                                <th>Clock Out</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>09 Mar 2026</td>
+                                <td>7:45 AM</td>
+                                <td>-</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td>08 Mar 2026</td>
+                                <td>7:50 AM</td>
+                                <td>5:00 PM</td>
+                                <td><span class="badge badge-success">Present</span></td>
+                            </tr>
+                            <tr>
+                                <td>07 Mar 2026</td>
+                                <td>8:00 AM</td>
+                                <td>5:00 PM</td>
+                                <td><span class="badge badge-success">Present</span></td>
+                            </tr>
+                            <tr>
+                                <td>06 Mar 2026</td>
+                                <td>7:30 AM</td>
+                                <td>5:00 PM</td>
+                                <td><span class="badge badge-success">Present</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Worker Tasks Section -->
+            <div id="worker-tasks-section" style="display: none;">
+                <div class="content-card">
+                    <h2>My Assigned Tasks</h2>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>Location</th>
+                                <th>Assigned By</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Water flowers</td>
+                                <td>Main garden</td>
+                                <td>Manager</td>
+                                <td>09 Mar 2026</td>
+                                <td><span class="badge badge-success">Completed</span></td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Mow lawn</td>
+                                <td>Front area</td>
+                                <td>Manager</td>
+                                <td>09 Mar 2026</td>
+                                <td><span class="badge badge-success">Completed</span></td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Trim hedges</td>
+                                <td>Perimeter</td>
+                                <td>Manager</td>
+                                <td>09 Mar 2026</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td><button class="btn btn-success btn-small" onclick="completeTask(3)">Mark Done</button></td>
+                            </tr>
+                            <tr>
+                                <td>Fix leaking pipe</td>
+                                <td>House 12</td>
+                                <td>Manager</td>
+                                <td>08 Mar 2026</td>
+                                <td><span class="badge badge-success">Completed</span></td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Guard Dashboard -->
+    <div id="guardDashboard" class="dashboard">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3>Royal City Estates</h3>
+                <p>Security Portal</p>
+            </div>
+            
+            <div class="user-info">
+                <div class="name" id="guardName">James Mwangi</div>
+                <div class="role">SECURITY GUARD</div>
+            </div>
+            
+            <ul class="menu">
+                <li><a href="#" onclick="showGuardSection('dashboard')" class="active" id="guard-menu-dashboard"><i>📊</i> Dashboard</a></li>
+                <li><a href="#" onclick="showGuardSection('report')" id="guard-menu-report"><i>⚠️</i> Report Incident</a></li>
+                <li><a href="#" onclick="showGuardSection('incidents')" id="guard-menu-incidents"><i>📋</i> My Reports</a></li>
+            </ul>
+        </div>
+        
+        <div class="main-content">
+            <div class="top-bar">
+                <div class="page-title" id="guardPageTitle">Dashboard</div>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+            
+            <!-- Guard Dashboard Section -->
+            <div id="guard-dashboard-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Shift</h3>
+                        <div class="number">Night</div>
+                        <div class="small-text">6:00 PM - 6:00 AM</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Reports This Week</h3>
+                        <div class="number">5</div>
+                        <div class="small-text">3 resolved, 2 pending</div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>Recent Alerts</h2>
+                    <div class="alert alert-danger">🚨 ACTIVE ALERT: Suspicious person reported - Be vigilant</div>
+                    <div class="alert alert-info">📢 Fire drill today at 3:00 PM</div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>Recent Incidents Reported</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date/Time</th>
+                                <th>Location</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>09 Mar 02:30 AM</td>
+                                <td>Main Gate</td>
+                                <td>Suspicious person loitering</td>
+                                <td><span class="badge badge-warning">Investigating</span></td>
+                            </tr>
+                            <tr>
+                                <td>08 Mar 11:00 PM</td>
+                                <td>Perimeter fence</td>
+                                <td>Broken fence near House 15</td>
+                                <td><span class="badge badge-success">Resolved</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Report Incident Section -->
+            <div id="guard-report-section" style="display: none;">
+                <div class="content-card">
+                    <h2>Report Security Incident</h2>
+                    
+                    <div class="form-row">
+                        <label>Incident Type</label>
+                        <select id="incidentType">
+                            <option>Suspicious Person</option>
+                            <option>Broken Fence/Gate</option>
+                            <option>Suspicious Vehicle</option>
+                            <option>Noise Complaint</option>
+                            <option>Fire Hazard</option>
+                            <option>Theft/Suspicious Activity</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-row">
+                        <label>Location</label>
+                        <input type="text" id="incidentLocation" placeholder="e.g., Main Gate, House 12, Parking Area">
+                    </div>
+                    
+                    <div class="form-row">
+                        <label>Date and Time</label>
+                        <input type="datetime-local" id="incidentDateTime">
+                    </div>
+                    
+                    <div class="form-row">
+                        <label>Description</label>
+                        <textarea id="incidentDescription" placeholder="Describe what happened in detail..."></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <label>Severity</label>
+                        <select id="incidentSeverity">
+                            <option value="low">Low - Minor issue</option>
+                            <option value="medium">Medium - Requires attention</option>
+                            <option value="high">High - Urgent</option>
+                            <option value="emergency">🚨 EMERGENCY - Immediate action needed</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn btn-danger" onclick="reportIncident()" style="width: 100%; padding: 15px; font-size: 16px;">SUBMIT INCIDENT REPORT</button>
+                </div>
+            </div>
+            
+            <!-- My Reports Section -->
+            <div id="guard-incidents-section" style="display: none;">
+                <div class="content-card">
+                    <h2>My Incident Reports</h2>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date/Time</th>
+                                <th>Type</th>
+                                <th>Location</th>
+                                <th>Severity</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>09 Mar 2026 02:30</td>
+                                <td>Suspicious Person</td>
+                                <td>Main Gate</td>
+                                <td><span class="badge badge-danger">High</span></td>
+                                <td><span class="badge badge-warning">Investigating</span></td>
+                            </tr>
+                            <tr>
+                                <td>08 Mar 2026 23:00</td>
+                                <td>Broken Fence</td>
+                                <td>Near House 15</td>
+                                <td><span class="badge badge-warning">Medium</span></td>
+                                <td><span class="badge badge-success">Resolved</span></td>
+                            </tr>
+                            <tr>
+                                <td>07 Mar 2026 20:15</td>
+                                <td>Suspicious Vehicle</td>
+                                <td>Parking Area</td>
+                                <td><span class="badge badge-warning">Medium</span></td>
+                                <td><span class="badge badge-success">Resolved</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="addHouseModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('addHouseModal')">&times;</span>
+            <h3>Add New House</h3>
+            
+            <div class="form-row">
+                <label>House Number</label>
+                <input type="text" id="houseNumber" placeholder="e.g., House 46">
+            </div>
+            
+            <div class="form-row">
+                <label>House Type</label>
+                <select id="houseType">
+                    <option>Bedsitter</option>
+                    <option>1-Bedroom</option>
+                    <option>2-Bedroom</option>
+                    <option>3-Bedroom</option>
+                </select>
+            </div>
+            
+            <div class="form-row">
+                <label>Monthly Rent (KSh)</label>
+                <input type="number" id="houseRent" placeholder="e.g., 12000">
+            </div>
+            
+            <div class="form-row">
+                <label>Description</label>
+                <textarea id="houseDescription" placeholder="Any additional details..."></textarea>
+            </div>
+            
+            <button class="btn btn-success" onclick="addHouse()" style="width: 100%; padding: 12px;">ADD HOUSE</button>
+        </div>
+    </div>
+
+    <div id="addTenantModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('addTenantModal')">&times;</span>
+            <h3>Add New Tenant</h3>
+            
+            <div class="form-row">
+                <label>Full Name</label>
+                <input type="text" id="tenantName" placeholder="Full name">
+            </div>
+            
+            <div class="form-row">
+                <label>Phone Number</label>
+                <input type="text" id="tenantPhone" placeholder="0712345678">
+            </div>
+            
+            <div class="form-row">
+                <label>Email</label>
+                <input type="email" id="tenantEmail" placeholder="tenant@email.com">
+            </div>
+            
+            <div class="form-row">
+                <label>ID Number</label>
+                <input type="text" id="tenantId" placeholder="ID number">
+            </div>
+            
+            <div class="form-row">
+                <label>Select House</label>
+                <select id="tenantHouse">
+                    <option>House 1 - 2-Bedroom (Vacant)</option>
+                    <option>House 4 - Bedsitter (Vacant)</option>
+                    <option>House 7 - 1-Bedroom (Vacant)</option>
+                </select>
+            </div>
+            
+            <div class="form-row">
+                <label>Lease Start Date</label>
+                <input type="date" id="leaseStart">
+            </div>
+            
+            <button class="btn btn-success" onclick="addTenant()" style="width: 100%; padding: 12px;">ADD TENANT</button>
+        </div>
+    </div>
+
+    <div id="addWorkerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('addWorkerModal')">&times;</span>
+            <h3>Add New Worker</h3>
+            
+            <div class="form-row">
+                <label>Full Name</label>
+                <input type="text" id="workerName" placeholder="Full name">
+            </div>
+            
+            <div class="form-row">
+                <label>Phone Number</label>
+                <input type="text" id="workerPhone" placeholder="0712345678">
+            </div>
+            
+            <div class="form-row">
+                <label>Role</label>
+                <select id="workerRole">
+                    <option>Gardener</option>
+                    <option>Cleaner</option>
+                    <option>Handyman</option>
+                    <option>Watchman</option>
+                </select>
+            </div>
+            
+            <div class="form-row">
+                <label>Daily Rate (KSh)</label>
+                <input type="number" id="workerRate" placeholder="e.g., 500">
+            </div>
+            
+            <button class="btn btn-success" onclick="addWorker()" style="width: 100%; padding: 12px;">ADD WORKER</button>
+        </div>
+    </div>
+
+    <div id="assignWorkerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('assignWorkerModal')">&times;</span>
+            <h3>Assign Worker to Task</h3>
+            
+            <div class="form-row">
+                <label>Maintenance Request</label>
+                <p id="requestDetails">Leaking pipe in kitchen - House 12</p>
+            </div>
+            
+            <div class="form-row">
+                <label>Select Worker</label>
+                <select id="selectWorker">
+                    <option>David Kimani - Handyman</option>
+                    <option>Peter Odhiambo - Gardener</option>
+                    <option>John Muthuri - Cleaner</option>
+                </select>
+            </div>
+            
+            <div class="form-row">
+                <label>Priority</label>
+                <select id="taskPriority">
+                    <option>High - Do immediately</option>
+                    <option>Medium - Do today</option>
+                    <option>Low - This week</option>
+                </select>
+            </div>
+            
+            <div class="form-row">
+                <label>Instructions</label>
+                <textarea id="taskInstructions" placeholder="Any special instructions..."></textarea>
+            </div>
+            
+            <button class="btn btn-primary" onclick="assignWorkerConfirm()" style="width: 100%; padding: 12px;">ASSIGN WORKER</button>
+        </div>
+    </div>
+
+    <div id="alertModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('alertModal')">&times;</span>
+            <div id="alertModalContent">
+                <h3>Alert Sent!</h3>
+                <p>Your message has been sent to all recipients.</p>
+            </div>
+            <button class="btn btn-primary" onclick="closeModal('alertModal')" style="margin-top: 20px; width: 100%;">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // Current user state
+        let currentUser = {
+            role: null,
+            name: null
+        };
+
+        // Clock state for worker
+        let clockedIn = true;
+        let clockInTime = "7:45 AM";
+
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString();
+            const dateStr = now.toLocaleDateString('en-GB', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+            
+            document.getElementById('currentDate').innerHTML = dateStr;
+            
+            const timeElement = document.getElementById('currentTime');
+            if (timeElement) {
+                timeElement.innerHTML = timeStr;
+            }
+        }
+
+        setInterval(updateTime, 1000);
+
+        // Login function
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('loginRole').value;
+            
+            // Simple validation (in real system this would check against database)
+            if (password.length > 0) {
+                // Hide login page
+                document.getElementById('loginPage').style.display = 'none';
+                
+                // Hide all dashboards first
+                document.querySelectorAll('.dashboard').forEach(d => {
+                    d.style.display = 'none';
+                });
+                
+                // Show appropriate dashboard
+                if (role === 'manager') {
+                    document.getElementById('managerDashboard').style.display = 'block';
+                    currentUser.role = 'manager';
+                    currentUser.name = 'John Manager';
+                    document.getElementById('managerName').innerHTML = 'John Manager';
+                    showManagerSection('dashboard');
+                } else if (role === 'tenant') {
+                    document.getElementById('tenantDashboard').style.display = 'block';
+                    currentUser.role = 'tenant';
+                    currentUser.name = 'John Kamau';
+                    document.getElementById('tenantName').innerHTML = 'John Kamau';
+                    showTenantSection('dashboard');
+                } else if (role === 'worker') {
+                    document.getElementById('workerDashboard').style.display = 'block';
+                    currentUser.role = 'worker';
+                    currentUser.name = 'Peter Odhiambo';
+                    document.getElementById('workerName').innerHTML = 'Peter Odhiambo';
+                    showWorkerSection('dashboard');
+                } else if (role === 'guard') {
+                    document.getElementById('guardDashboard').style.display = 'block';
+                    currentUser.role = 'guard';
+                    currentUser.name = 'James Mwangi';
+                    document.getElementById('guardName').innerHTML = 'James Mwangi';
+                    showGuardSection('dashboard');
+                }
+                
+                document.getElementById('loginError').style.display = 'none';
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        });
+
+        // Quick login function
+        function quickLogin(role) {
+            document.getElementById('loginRole').value = role;
+            document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+        }
+
+        // Logout function
+        function logout() {
+            document.querySelectorAll('.dashboard').forEach(d => {
+                d.style.display = 'none';
+            });
+            document.getElementById('loginPage').style.display = 'flex';
+        }
+
+        // Manager section navigation
+        function showManagerSection(section) {
+            // Hide all sections
+            document.getElementById('manager-dashboard-section').style.display = 'none';
+            document.getElementById('manager-houses-section').style.display = 'none';
+            document.getElementById('manager-tenants-section').style.display = 'none';
+            document.getElementById('manager-workers-section').style.display = 'none';
+            document.getElementById('manager-payments-section').style.display = 'none';
+            document.getElementById('manager-maintenance-section').style.display = 'none';
+            document.getElementById('manager-security-section').style.display = 'none';
+            document.getElementById('manager-bookings-section').style.display = 'none';
+            document.getElementById('manager-reports-section').style.display = 'none';
+            document.getElementById('manager-alerts-section').style.display = 'none';
+            
+            // Remove active class from all menu items
+            document.querySelectorAll('#managerDashboard .menu a').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected section
+            if (section === 'dashboard') {
+                document.getElementById('manager-dashboard-section').style.display = 'block';
+                document.getElementById('managerPageTitle').innerHTML = 'Dashboard';
+                document.getElementById('menu-dashboard').classList.add('active');
+            } else if (section === 'houses') {
+                document.getElementById('manager-houses-section').style.display = 'block';
+                document.getElementById('managerPageTitle').innerHTML = 'Houses Management';
+                document.getElementById('menu-houses').classList.add('active');
+            } else if (section === 'tenants') {
+                document.getElementById('manager-tenants-section').style.display = 'block';
+                document.getElementById('managerPageTitle').innerHTML = 'Tenants Management';
+                document.getElementById('menu-tenants').classList.add('active');
+            } else if (section === 'workers') {
+                document.getElementById('manager-workers-section').style.display = 'block';
+                document.getElementById('managerPageTitle').innerHTML = 'Workers Management';
+                document.getElementById('menu-workers').classList.add('active');
+            } else if (section === 'payments') {
+                document.getElementById('manager-payments-section').style.display = 'block';
+                document.getElementById('managerPageTitle').innerHTML = 'Payments';
+                document.getElementById('menu-payments').classList.add('active');
+            } else if (section === 'maintenance') {
+                document.getElementById('manager-maintenance-section').style.display = 'block';
+                document.getElementById('managerPageTitle').innerHTML = 'Maintenance Requests';
+                document.getElementById('menu-maintenance').classList.add('active');
+            } else if (section === 'security') {
+                document.getElementById('manager-security-section').style.display = 'block';
+                document.getElementById('managerPageTitle').innerHTML = 'Security Incidents';
+                document.getElementById('menu-security').classList.add('active');
+            } else if (section === 'bookings') {
+                document.getElementById('manager-bookings-section').style.display = 'block';
+                document.getElementById('managerPageTitle').innerHTML = 'Booking Requests';
+                document.getElementById('menu-bookings').classList.add('active');
+            } else if (section === 'reports') {
+                document.getElementById('manager-reports-section').style.display = 'block';
+                document.getElementById('managerPageTitle').innerHTML = 'Reports';
+                document.getElementById('menu-reports').classList.add('active');
+            } else if (section === 'alerts') {
+                document.getElementById('manager-alerts-section').style.display = 'block';
+                document.getElementById('managerPageTitle').innerHTML = 'Send Alert';
+                document.getElementById('menu-alerts').classList.add('active');
+            }
+        }
+
+        // Tenant section navigation
+        function showTenantSection(section) {
+            document.getElementById('tenant-dashboard-section').style.display = 'none';
+            document.getElementById('tenant-payrent-section').style.display = 'none';
+            document.getElementById('tenant-maintenance-section').style.display = 'none';
+            document.getElementById('tenant-history-section').style.display = 'none';
+            document.getElementById('tenant-profile-section').style.display = 'none';
+            
+            document.querySelectorAll('#tenantDashboard .menu a').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            if (section === 'dashboard') {
+                document.getElementById('tenant-dashboard-section').style.display = 'block';
+                document.getElementById('tenantPageTitle').innerHTML = 'Dashboard';
+                document.getElementById('tenant-menu-dashboard').classList.add('active');
+            } else if (section === 'pay-rent') {
+                document.getElementById('tenant-payrent-section').style.display = 'block';
+                document.getElementById('tenantPageTitle').innerHTML = 'Pay Rent';
+                document.getElementById('tenant-menu-payrent').classList.add('active');
+            } else if (section === 'maintenance') {
+                document.getElementById('tenant-maintenance-section').style.display = 'block';
+                document.getElementById('tenantPageTitle').innerHTML = 'Maintenance';
+                document.getElementById('tenant-menu-maintenance').classList.add('active');
+            } else if (section === 'history') {
+                document.getElementById('tenant-history-section').style.display = 'block';
+                document.getElementById('tenantPageTitle').innerHTML = 'Payment History';
+                document.getElementById('tenant-menu-history').classList.add('active');
+            } else if (section === 'profile') {
+                document.getElementById('tenant-profile-section').style.display = 'block';
+                document.getElementById('tenantPageTitle').innerHTML = 'My Profile';
+                document.getElementById('tenant-menu-profile').classList.add('active');
+            }
+        }
+
+        // Worker section navigation
+        function showWorkerSection(section) {
+            document.getElementById('worker-dashboard-section').style.display = 'none';
+            document.getElementById('worker-attendance-section').style.display = 'none';
+            document.getElementById('worker-tasks-section').style.display = 'none';
+            
+            document.querySelectorAll('#workerDashboard .menu a').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            if (section === 'dashboard') {
+                document.getElementById('worker-dashboard-section').style.display = 'block';
+                document.getElementById('workerPageTitle').innerHTML = 'Dashboard';
+                document.getElementById('worker-menu-dashboard').classList.add('active');
+            } else if (section === 'attendance') {
+                document.getElementById('worker-attendance-section').style.display = 'block';
+                document.getElementById('workerPageTitle').innerHTML = 'Attendance';
+                document.getElementById('worker-menu-attendance').classList.add('active');
+                
+                // Update attendance display
+                updateAttendanceDisplay();
+            } else if (section === 'tasks') {
+                document.getElementById('worker-tasks-section').style.display = 'block';
+                document.getElementById('workerPageTitle').innerHTML = 'My Tasks';
+                document.getElementById('worker-menu-tasks').classList.add('active');
+            }
+        }
+
+        // Guard section navigation
+        function showGuardSection(section) {
+            document.getElementById('guard-dashboard-section').style.display = 'none';
+            document.getElementById('guard-report-section').style.display = 'none';
+            document.getElementById('guard-incidents-section').style.display = 'none';
+            
+            document.querySelectorAll('#guardDashboard .menu a').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            if (section === 'dashboard') {
+                document.getElementById('guard-dashboard-section').style.display = 'block';
+                document.getElementById('guardPageTitle').innerHTML = 'Dashboard';
+                document.getElementById('guard-menu-dashboard').classList.add('active');
+            } else if (section === 'report') {
+                document.getElementById('guard-report-section').style.display = 'block';
+                document.getElementById('guardPageTitle').innerHTML = 'Report Incident';
+                document.getElementById('guard-menu-report').classList.add('active');
+            } else if (section === 'incidents') {
+                document.getElementById('guard-incidents-section').style.display = 'block';
+                document.getElementById('guardPageTitle').innerHTML = 'My Reports';
+                document.getElementById('guard-menu-incidents').classList.add('active');
+            }
+        }
+
+        // Modal functions
+        function showAddHouseModal() {
+            document.getElementById('addHouseModal').style.display = 'flex';
+        }
+
+        function showAddTenantModal() {
+            document.getElementById('addTenantModal').style.display = 'flex';
+        }
+
+        function showAddWorkerModal() {
+            document.getElementById('addWorkerModal').style.display = 'flex';
+        }
+
+        function assignWorker(requestId) {
+            document.getElementById('assignWorkerModal').style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Action functions
+        function addHouse() {
+            alert('House added successfully! (Demo - In real system this would save to database)');
+            closeModal('addHouseModal');
+        }
+
+        function addTenant() {
+            alert('Tenant added successfully! (Demo - In real system this would save to database)');
+            closeModal('addTenantModal');
+        }
+
+        function addWorker() {
+            alert('Worker added successfully! (Demo - In real system this would save to database)');
+            closeModal('addWorkerModal');
+        }
+
+        function assignWorkerConfirm() {
+            alert('Worker assigned successfully!');
+            closeModal('assignWorkerModal');
+        }
+
+        function confirmPayment() {
+            const code = document.getElementById('mpesaCode').value;
+            if (code) {
+                alert(`Payment confirmed! M-Pesa Code: ${code}\nYour rent has been recorded.`);
+            } else {
+                alert('Please enter the M-Pesa confirmation code');
+            }
+        }
+
+        function submitMaintenance() {
+            alert('Maintenance request submitted successfully!');
+            showTenantSection('maintenance');
+        }
+
+        function reportIncident() {
+            alert('Incident reported successfully! The manager has been notified.');
+            showGuardSection('incidents');
+        }
+
+        function completeTask(taskId) {
+            alert('Task marked as completed!');
+            showWorkerSection('tasks');
+        }
+
+        function sendAlert() {
+            const type = document.getElementById('alertType').value;
+            const message = document.getElementById('alertMessage').value;
+            
+            if (!message) {
+                alert('Please enter an alert message');
+                return;
+            }
+            
+            document.getElementById('alertModalContent').innerHTML = `
+                <h3>Alert Sent!</h3>
+                <p>Your ${type} alert has been sent to:</p>
+                <ul>
+                    <li>38 Tenants</li>
+                    <li>4 Workers</li>
+                    <li>2 Guards</li>
+                </ul>
+                <p>Message: "${message}"</p>
+            `;
+            
+            document.getElementById('alertModal').style.display = 'flex';
+            document.getElementById('alertMessage').value = '';
+        }
+
+        function generateReport(type) {
+            const previewDiv = document.getElementById('reportPreview');
+            const titleDiv = document.getElementById('reportTitle');
+            const contentDiv = document.getElementById('reportContent');
+            
+            previewDiv.style.display = 'block';
+            
+            if (type === 'occupancy') {
+                titleDiv.innerHTML = 'Occupancy Report - March 2026';
+                contentDiv.innerHTML = `
+                    <table>
+                        <tr><th>Total Houses</th><td>45</td></tr>
+                        <tr><th>Occupied</th><td>38</td></tr>
+                        <tr><th>Vacant</th><td>7</td></tr>
+                        <tr><th>Occupancy Rate</th><td>84%</td></tr>
+                    </table>
+                    <h4>Vacant Houses:</h4>
+                    <ul>
+                        <li>House 1 - 2-Bedroom - KSh 12,000</li>
+                        <li>House 4 - Bedsitter - KSh 8,000</li>
+                        <li>House 7 - 1-Bedroom - KSh 10,000</li>
+                        <li>House 9 - 2-Bedroom - KSh 12,000</li>
+                        <li>House 14 - 3-Bedroom - KSh 18,000</li>
+                        <li>House 21 - 2-Bedroom - KSh 12,000</li>
+                        <li>House 30 - 1-Bedroom - KSh 10,000</li>
+                    </ul>
+                `;
+            } else if (type === 'rent') {
+                titleDiv.innerHTML = 'Rent Collection Report - March 2026';
+                contentDiv.innerHTML = `
+                    <table>
+                        <tr><th>Total Expected</th><td>KSh 540,000</td></tr>
+                        <tr><th>Total Collected</th><td>KSh 456,000</td></tr>
+                        <tr><th>Outstanding</th><td>KSh 84,000</td></tr>
+                        <tr><th>Collection Rate</th><td>84%</td></tr>
+                    </table>
+                    <h4>Defaulters (5 tenants):</h4>
+                    <ul>
+                        <li>Sarah Akinyi - House 15 - KSh 12,000 - Overdue 4 days</li>
+                        <li>Joseph Kariuki - House 20 - KSh 15,000 - Overdue 4 days</li>
+                        <li>Margaret Wambui - House 25 - KSh 12,000 - Overdue 4 days</li>
+                        <li>Daniel Muthama - House 33 - KSh 18,000 - Overdue 4 days</li>
+                        <li>Rose Achieng - House 41 - KSh 10,000 - Overdue 4 days</li>
+                    </ul>
+                `;
+            } else if (type === 'attendance') {
+                titleDiv.innerHTML = 'Worker Attendance Report - March 2026';
+                contentDiv.innerHTML = `
+                    <table>
+                        <tr><th>Worker</th><th>Role</th><th>Present</th><th>Absent</th><th>Late</th></tr>
+                        <tr><td>Peter Odhiambo</td><td>Gardener</td><td>8</td><td>0</td><td>1</td></tr>
+                        <tr><td>John Muthuri</td><td>Cleaner</td><td>9</td><td>0</td><td>0</td></tr>
+                        <tr><td>David Kimani</td><td>Handyman</td><td>7</td><td>1</td><td>1</td></tr>
+                        <tr><td>Samuel Ochieng</td><td>Gardener</td><td>8</td><td>0</td><td>0</td></tr>
+                    </table>
+                `;
+            }
+        }
+
+        function updateAttendanceDisplay() {
+            if (clockedIn) {
+                document.getElementById('attendanceMessage').innerHTML = `You are clocked in since ${clockInTime}`;
+                document.getElementById('clockInBtn').style.display = 'none';
+                document.getElementById('clockOutBtn').style.display = 'inline-block';
+            } else {
+                document.getElementById('attendanceMessage').innerHTML = 'You are not clocked in yet today';
+                document.getElementById('clockInBtn').style.display = 'inline-block';
+                document.getElementById('clockOutBtn').style.display = 'none';
+            }
+        }
+
+        function clockIn() {
+            const now = new Date();
+            clockInTime = now.toLocaleTimeString();
+            clockedIn = true;
+            updateAttendanceDisplay();
+            alert(`Clocked in at ${clockInTime}`);
+        }
+
+        function clockOut() {
+            clockedIn = false;
+            updateAttendanceDisplay();
+            alert('Clocked out successfully');
+        }
+
+        // Initialize date on load
+        window.onload = function() {
+            updateTime();
+        };
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>
